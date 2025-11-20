@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GeoQuiz - World Capitals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">🌍</div>
+      <div>
+        <div class="brand-text-title">GeoQuiz</div>
+        <div class="brand-text-sub">World capitals training arena</div>
+      </div>
+    </div>
+    <button id="themeToggle" class="theme-toggle-btn"></button>
+  </header>
+
+  <main class="main-card">
+    <span class="pill">🌐 Select a game mode</span>
+    <h1 class="hero-title">Choose your continent</h1>
+    <p class="hero-sub">
+      Train your capital knowledge by region or go for the full world challenge.
+      Each quiz gives you 20 minutes to type as many capitals as you can.
+    </p>
+
+    <div class="continent-grid">
+      <a href="world.html" class="continent-card">
+        <div>
+          <div class="continent-name">🌍 World</div>
+          <div class="continent-meta">All 190+ recognized countries.</div>
+        </div>
+        <div class="continent-badge">Full challenge</div>
+      </a>
+
+      <a href="europe.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇪🇺 Europe</div>
+          <div class="continent-meta">European countries and capitals.</div>
+        </div>
+        <div class="continent-badge">Medium difficulty</div>
+      </a>
+
+      <a href="asia.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇦🇸 Asia</div>
+          <div class="continent-meta">From Tokyo to Riyadh and beyond.</div>
+        </div>
+        <div class="continent-badge">Packed with countries</div>
+      </a>
+
+      <a href="africa.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇦🇫 Africa</div>
+          <div class="continent-meta">54 nations across the continent.</div>
+        </div>
+        <div class="continent-badge">Great for serious learners</div>
+      </a>
+
+      <a href="north-america.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇺🇸 North America</div>
+          <div class="continent-meta">USA, Canada, Caribbean & Central America.</div>
+        </div>
+        <div class="continent-badge">Compact but tricky</div>
+      </a>
+
+      <a href="south-america.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇧🇷 South America</div>
+          <div class="continent-meta">From Buenos Aires to Bogotá.</div>
+        </div>
+        <div class="continent-badge">Small, but not easy</div>
+      </a>
+
+      <a href="oceania.html" class="continent-card">
+        <div>
+          <div class="continent-name">🇦🇺 Oceania</div>
+          <div class="continent-meta">Australia, New Zealand, islands and more.</div>
+        </div>
+        <div class="continent-badge">Great for memorization</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

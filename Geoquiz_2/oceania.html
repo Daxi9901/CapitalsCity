@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GeoQuiz - Oceania Capitals (5 minutes)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* -------------------- THEME VARIABLES ---------------------- */
+
+body {
+  --bg-color: #0b0f19;
+  --text-color: #e5e5e5;
+  --card-bg: #111827;
+  --border-color: #1f2937;
+  --input-bg: #0b1120;
+}
+
+body.light {
+  --bg-color: #f4f4f4;
+  --text-color: #111;
+  --card-bg: #ffffff;
+  --border-color: #d1d5db;
+  --input-bg: #f0f0f0;
+}
+
+/* -------------------- BASE STYLE ---------------------- */
+
+body{
+  background: var(--bg-color);
+  margin:0;
+  font-family:Arial, sans-serif;
+  color: var(--text-color);
+}
+
+.container{
+  max-width:850px;
+  margin:0 auto;
+  padding:16px;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+}
+
+h1{
+  margin:5px 0 0 0;
+  font-size:22px;
+}
+
+.sub{
+  margin:0;
+  font-size:13px;
+  opacity:0.7;
+}
+
+.back{
+  color:#60a5fa;
+  text-decoration:none;
+  font-size:13px;
+}
+
+.card{
+  background: var(--card-bg);
+  padding:16px;
+  border-radius:14px;
+  border:1px solid var(--border-color);
+  box-shadow:0 0 22px rgba(0,0,0,0.4);
+}
+
+.info-row{
+  display:flex;
+  gap:12px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+
+.info-box{
+  flex:1;
+  min-width:140px;
+  background: var(--input-bg);
+  border:1px solid var(--border-color);
+  padding:10px;
+  border-radius:10px;
+  font-size:13px;
+}
+
+.info-title{
+  opacity:0.7;
+}
+
+.info-value{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:8px 15px;
+  border-radius:20px;
+  cursor:pointer;
+  border:1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size:13px;
+}
+
+.btn:hover{
+  background: var(--card-bg);
+}
+
+.btn-danger{
+  background:#b91c1c;
+  border-color:#7f1d1d;
+}
+
+.btn-danger:hover{
+  background:#7f1d1d;
+}
+
+/* -------------------- TABLE ---------------------- */
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+th{
+  background: var(--card-bg);
+  padding:8px;
+  text-align:left;
+  border-bottom:1px solid var(--border-color);
+  position:sticky;
+  top:0;
+  font-size:12px;
+}
+
+td{
+  padding:6px 8px;
+  border-bottom:1px solid var(--border-color);
+}
+
+input{
+  width:100%;
+  padding:5px;
+  background: var(--input-bg);
+  border:1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius:6px;
+}
+
+input.correct{
+  background:rgba(34,197,94,0.25) !important;
+  border-color:#22c55e !important;
+}
+
+input.incorrect{
+  background:rgba(239,68,68,0.25) !important;
+  border-color:#ef4444 !important;
+}
+
+#score{
+  margin-top:12px;
+  font-size:14px;
+  opacity:0.8;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <div style="font-size:26px;">🇦🇺</div>
+    <div>
+      <h1>Oceania Capitals Quiz</h1>
+      <p class="sub">14 countries • 5 minutes</p>
+    </div>
+  </div>
+
+  <a class="back" href="index.html">← Back</a>
+</header>
+
+<div class="card">
+
+  <div class="info-row">
+    <div class="info-box">
+      <div class="info-title">Time left</div>
+      <div class="info-value" id="timer">05:00</div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">Progress</div>
+      <div class="info-value" id="counter">0 / 14</div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button id="giveUp" class="btn btn-danger">💀 Give Up</button>
+    <button id="reset" class="btn">🔁 Reset</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Capital</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <p id="score"></p>
+
+</div>
+</div>
+
+<script>
+// ------------------ DATA ------------------
+
+const oc = {
+"Australia":"Canberra",
+"Fiji":"Suva",
+"Kiribati":"South Tarawa",
+"Marshall Islands":"Majuro",
+"Micronesia":"Palikir",
+"Nauru":"Yaren",
+"New Zealand":"Wellington",
+"Palau":"Ngerulmud",
+"Papua New Guinea":"Port Moresby",
+"Samoa":"Apia",
+"Solomon Islands":"Honiara",
+"Tonga":"Nukuʻalofa",
+"Tuvalu":"Funafuti",
+"Vanuatu":"Port Vila"
+};
+
+const entries = Object.entries(oc);
+let correctCount = 0;
+
+// ------------------ BUILD TABLE ------------------
+
+const tbody = document.getElementById("tableBody");
+
+entries.forEach(([country, capital]) => {
+  const row = document.createElement("tr");
+
+  const ctd = document.createElement("td");
+  ctd.textContent = country;
+
+  const itd = document.createElement("td");
+  const input = document.createElement("input");
+
+  input.addEventListener("input", () => check(capital, input));
+
+  itd.appendChild(input);
+  row.appendChild(ctd);
+  row.appendChild(itd);
+  tbody.appendChild(row);
+});
+
+// ------------------ CHECK ------------------
+
+function check(capital, input) {
+  const val = input.value.trim().toLowerCase();
+
+  if (val === capital.toLowerCase()) {
+    if (!input.disabled) {
+      correctCount++;
+      updateCounter();
+    }
+    input.value = capital;
+    input.classList.remove("incorrect");
+    input.classList.add("correct");
+    input.disabled = true;
+  } 
+  else if (val.length > 0) {
+    input.classList.add("incorrect");
+  } 
+  else {
+    input.classList.remove("incorrect");
+  }
+}
+
+function updateCounter() {
+  document.getElementById("counter").textContent =
+    correctCount + " / " + entries.length;
+}
+
+// ------------------ TIMER (5 minutes) ------------------
+
+let time = 5 * 60;
+
+const timerEl = document.getElementById("timer");
+
+const interval = setInterval(() => {
+  time--;
+  if (time <= 0) {
+    clearInterval(interval);
+    revealAll("Time is up!");
+  }
+
+  const m = Math.floor(time / 60).toString().padStart(2,"0");
+  const s = (time % 60).toString().padStart(2,"0");
+  timerEl.textContent = `${m}:${s}`;
+}, 1000);
+
+// ------------------ GIVE UP ------------------
+
+document.getElementById("giveUp").onclick = () => {
+  revealAll("You gave up.");
+};
+
+function revealAll(msg){
+  document.querySelectorAll("input").forEach((input, i) => {
+    const [country, capital] = entries[i];
+    input.value = capital;
+    input.classList.remove("incorrect");
+    input.classList.add("correct");
+    input.disabled = true;
+  });
+
+  correctCount = entries.length;
+  updateCounter();
+  document.getElementById("score").textContent = msg + 
+    " All answers are shown.";
+}
+
+// ------------------ RESET ------------------
+
+document.getElementById("reset").onclick = () => location.reload();
+
+</script>
+
+<footer style="
+  margin-top:40px;
+  padding:15px 0;
+  text-align:center;
+  font-size:13px;
+  color:#9ca3af;
+  border-top:1px solid #1f2937;
+">
+  GeoQuiz © 2025 • 
+  <a href="about.html" style="color:#60a5fa; text-decoration:none;">About</a> • 
+  <a href="privacy.html" style="color:#60a5fa; text-decoration:none;">Privacy</a> • 
+  <a href="contact.html" style="color:#60a5fa; text-decoration:none;">Contact</a>
+   • <a href="https://buymeacoffee.com/daxidarko9f
+" 
+      target="_blank" 
+      style="color:#fbbf24; text-decoration:none;">
+      Buy Me a Coffee ☕
+   </a>
+
+</footer>
+
+<script src="script.js"></script>
+
+
+</body>
+</html>
